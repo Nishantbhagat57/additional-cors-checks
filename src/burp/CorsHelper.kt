@@ -65,12 +65,17 @@ class CorsHelper(private val callbacks: IBurpExtenderCallbacks, private val url:
         corsHeaderArr.add("Origin: https://$URL") // arbitrary reflection
         corsHeaderArr.add("Origin: http://$BASE_URL")  // trust HTTP
         corsHeaderArr.add("Origin: null") // null origin
-        corsHeaderArr.add("Origin: https://$BASE_URL.$URL") // prefix match https://evil.com.example.com
-        corsHeaderArr.add("Origin: https://$BASE_URL$URL") // suffix match https://evil.comexample.com
+        corsHeaderArr.add("Origin: https://$BASE_URL.$URL") // prefix match https://vulnerable.com.example.com
+        corsHeaderArr.add("Origin: https://$BASE_URL$URL") // suffix match https://vulnerable.comexample.com
         corsHeaderArr.add("Origin: https://subdomain.$BASE_URL") // trust arbitrary subdomain
         corsHeaderArr.add("Origin: https://${BASE_URL.dropLast(1)}") // substring match
-        corsHeaderArr.add("Origin: https://$BASE_URL" + "_$URL") // underscope bypass https://www.corben.io/advanced-cors-techniques/ example.com_.evil.com
-
+        corsHeaderArr.add("Origin: https://anything$BASE_URL") // https://anythingvulnerable.com
+        corsHeaderArr.add("Origin: https://$BASE_URL" + "_.$URL") // underscope bypass 1 https://corben.io/blog/18-6-16-advanced-cors-techniques/ vulnerable.com_.example.com
+        corsHeaderArr.add("Origin: https://$BASE_URL" + "._.$URL") // underscope bypass 2 https://portswigger.net/web-security/ssrf/url-validation-bypass-cheat-sheet/ vulnerable.com._.example.com
+        corsHeaderArr.add("Origin: https://$BASE_URL" + ".&.$URL") // & bypass https://portswigger.net/web-security/ssrf/url-validation-bypass-cheat-sheet/ vulnerable.com.&.example.com
+        corsHeaderArr.add("Origin: https://localhost.$BASE_URL/") // localhost bypass https://portswigger.net/web-security/ssrf/url-validation-bypass-cheat-sheet/ localhost.vulnerable.com/
+        corsHeaderArr.add("Origin: http://s$BASE_URL/") // unencrypted domain ends with http://s<allowed>/ https://portswigger.net/web-security/ssrf/url-validation-bypass-cheat-sheet/ http://svulnerable.com
+        
         // dot not escaped
         if (BASE_URL.count { "." in BASE_URL } > 1) {
             val lastindex = BASE_URL.lastIndexOf(".")
