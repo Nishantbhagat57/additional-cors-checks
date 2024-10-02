@@ -69,7 +69,7 @@ class CorsHelper(private val callbacks: IBurpExtenderCallbacks, private val url:
         corsHeaderArr.add("Origin: https://$BASE_URL$URL") // suffix match https://vulnerable.comexample.com
         corsHeaderArr.add("Origin: https://subdomain.$BASE_URL") // trust arbitrary subdomain
         corsHeaderArr.add("Origin: https://${BASE_URL.dropLast(1)}") // substring match
-        corsHeaderArr.add("Origin: https://anything$BASE_URL") // https://anythingvulnerable.com
+        corsHeaderArr.add("Origin: https://localhost$BASE_URL") // https://anythingvulnerable.com & https://localhostvulnerable.com - covers 2 cases
         corsHeaderArr.add("Origin: https://$BASE_URL" + "_.$URL") // underscope bypass 1 https://corben.io/blog/18-6-16-advanced-cors-techniques/ vulnerable.com_.example.com
         corsHeaderArr.add("Origin: https://$BASE_URL" + "._.$URL") // underscope bypass 2 https://portswigger.net/web-security/ssrf/url-validation-bypass-cheat-sheet/ vulnerable.com._.example.com
         corsHeaderArr.add("Origin: https://$BASE_URL" + ".&.$URL") // & bypass https://portswigger.net/web-security/ssrf/url-validation-bypass-cheat-sheet/ vulnerable.com.&.example.com
