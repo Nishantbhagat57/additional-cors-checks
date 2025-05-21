@@ -67,6 +67,11 @@ class CorsHelper(private val callbacks: IBurpExtenderCallbacks, private val url:
         corsHeaderArr.add("Origin: null") // null origin
         corsHeaderArr.add("Origin: https://$BASE_URL.$URL") // prefix match https://vulnerable.com.example.com
         corsHeaderArr.add("Origin: https://$BASE_URL$URL") // suffix match https://vulnerable.comexample.com
+        corsHeaderArr.add("Origin: https://$URL.$BASE_URL") // prefix match https://example.com.vulnerable.com        
+        corsHeaderArr.add("Origin: https://$URL$BASE_URL") // suffix match https://example.comvulnerable.com
+        corsHeaderArr.add("Origin: https://$BASE_URL_$URL") // prefix match https://vulnerable.com_example.com
+        corsHeaderArr.add("Origin: https://$URL_$BASE_URL") // suffix match https://example.com_vulnerable.com
+        corsHeaderArr.add("Origin: $BASE_URL://$URL") // prefix match vulnerable.com://example.com
         corsHeaderArr.add("Origin: https://subdomain.$BASE_URL") // trust arbitrary subdomain
         corsHeaderArr.add("Origin: https://${BASE_URL.dropLast(1)}") // substring match
         corsHeaderArr.add("Origin: https://localhost$BASE_URL") // https://anythingvulnerable.com & https://localhostvulnerable.com - covers 2 cases
